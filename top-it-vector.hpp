@@ -3,12 +3,16 @@
 
 #include <cstddef>
 
-template< class T >
-struct Vector
+namespace
 {
-  T * data;
-  size_t size;
-  size_t capacity
-};
+  template< class T >
+  struct Vector
+  {
+    private:
+      T * data;
+      size_t size;
+      size_t capacity;
+  };
+}
 
 #endif
