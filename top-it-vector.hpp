@@ -3,16 +3,38 @@
 
 #include <cstddef>
 
-namespace
+namespace topit
 {
   template< class T >
   struct Vector
   {
+    Vector();
+    ~Vector();
+
+    bool isEmpty() const noexcept;
+
     private:
-      T * data;
-      size_t size;
-      size_t capacity;
+      T * data_;
+      size_t size_;
+      size_t capacity_;
   };
 }
+
+template< class T >
+bool topit::Vector< T >::isEmpty() const noexcept
+{
+  return false;
+}
+
+template< class T >
+topit::Vector< T >::~Vector()
+{}
+
+template< class T >
+topit::Vector< T >::Vector():
+  data_(),
+  size_(),
+  capacity_()
+{}
 
 #endif
