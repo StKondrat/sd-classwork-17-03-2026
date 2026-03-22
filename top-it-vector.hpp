@@ -32,15 +32,57 @@ namespace topit
 }
 
 template< class T >
-void topit::Vector< T >::pushBack(const T & v)
-{
-
-}
-
-template< class T >
 bool topit::Vector< T >::isEmpty() const noexcept
 {
   return !size_;
+}
+
+template< class T >
+size_t topit::Vector< T >::getSize() const noexcept
+{
+  return size_;
+}
+
+template< class T >
+size_t topit::Vector< T >::getCapacity() const noexcept
+{
+  return capacity_;
+}
+
+template< class T >
+void topit::Vector< T >::pushBack(const T & v)
+{
+  T * newData = nullptr;
+  if (size_ == capacity_)
+  {
+    try
+    {
+      newData = new T[capacity_ + 1];
+      for (size_t i = 0; i < size_; ++i)
+      {
+        newData[i] = data_[i];
+      }
+    }
+    catch(...)
+    {
+      delete[] newData;
+      throw;
+    }
+    ++capacity_;
+    delete[] data_;
+    data_ = newData;
+  }
+  data_[size_] = v;
+  ++size_;
+}
+
+template< class T >
+void topit::Vector< T >::popBack()
+{
+  if (size_ > 0)
+  {
+    --size_;
+  }
 }
 
 template< class T >
