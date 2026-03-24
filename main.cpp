@@ -111,6 +111,13 @@ bool testPopBack()
   return res;
 }
 
+bool testCopyConstructor()
+{
+  topit::Vector< int > v;
+  topit::Vector< int > yav = v;
+  return v == yav;
+}
+
 int main()
 {
   using test_t = std::pair< const char *, bool(*)() >;
@@ -124,7 +131,8 @@ int main()
     { "Get size", testGetSize },
     { "Get capacity", testGetCapacity },
     { "Push back", testPushBack },
-    { "Pop back", testPopBack }
+    { "Pop back", testPopBack },
+    { "Copy constructor ", testCopyConstructor}
   };
 
   const size_t count = sizeof(tests) / sizeof(test_t);
