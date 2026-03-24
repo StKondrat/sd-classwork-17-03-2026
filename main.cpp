@@ -23,6 +23,41 @@ bool testElementInboundAccess()
   }
 }
 
+bool testElementInboundConstAccess()
+{
+  topit::Vector< int > v;
+  v.pushBack(1);
+  const topit::Vector< int > & rv = v;
+
+  try
+  {
+  const int & val = rv.at(0);
+  return val == 1;
+  }
+  catch(...)
+  {
+    return false;
+  }
+}
+
+bool testElementOutOfBoundConstAccess()
+{
+  const topit::Vector< int > v;
+  try
+  {
+    v.at(0);
+    return false;
+  }
+  catch(const std::out_of_range &)
+  {
+    return true;
+  }
+  catch(...)
+  {
+    return false;
+  }
+}
+
 bool testElementOutOfBoundAccess()
 {
   topit::Vector< int > v;
@@ -84,6 +119,8 @@ int main()
     { "Empty vector", testEmptyVector },
     { "Inbound access", testElementInboundAccess },
     { "Out of bound access", testElementOutOfBoundAccess},
+    { "Inbound const access", testElementInboundConstAccess},
+    { "Out of bound const access", testElementOutOfBoundConstAccess},
     { "Get size", testGetSize },
     { "Get capacity", testGetCapacity },
     { "Push back", testPushBack },
