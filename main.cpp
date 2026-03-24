@@ -126,7 +126,18 @@ bool testCopyConstructorForNonEmpty()
   return v == yav;
 }
 
-bool testCopyOperator()
+bool testCopyOperatorForEmpty()
+{
+  topit::Vector< int > v;
+  topit::Vector< int > cv;
+  cv = v;
+  bool res = cv == v;
+  v.pushBack(1);
+  res = res || !(v == cv);
+  return res;
+}
+
+bool testCopyOperatorForNonEmpty()
 {
   topit::Vector< int > v;
   v.pushBack(1);
@@ -135,14 +146,86 @@ bool testCopyOperator()
   return cv == v;
 }
 
-bool testMoveOperator()
+bool testMoveConstructorForEmpty()
+{
+  topit::Vector< int > v;
+  topit::Vector< int > mcv = std::move(v);
+  try
+  {
+    v.at(0);
+    return false;
+  }
+  catch (std::out_of_range &)
+  {
+    return mcv.isEmpty();
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
+bool testMoveConstructorForNonEmpty()
 {
   topit::Vector< int > v;
   v.pushBack(1);
-  topit::Vector< int > mvv;
-  mvv = std::move(v);
-  bool res = mvv.getSize() == 1 && mvv[0] == 1;
-  return res;
+  topit::Vector< int > mcv = std::move(v);
+  bool res = mcv.getSize() == 1 && mcv[0] == 1;
+  try
+  {
+    v.at(0);
+    return false;
+  }
+  catch (std::out_of_range &)
+  {
+    return res;
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
+bool testMoveOperatorForEmpty()
+{
+  topit::Vector< int > v;
+  topit::Vector< int > mov;
+  mov = std::move(v);
+  try
+  {
+    v.at(0);
+    return false;
+  }
+  catch (std::out_of_range &)
+  {
+    return mov.isEmpty();
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
+bool testMoveOperatorForNonEmpty()
+{
+  topit::Vector< int > v;
+  v.pushBack(1);
+  topit::Vector< int > mov;
+  mov = std::move(v);
+  bool res = mov.getSize() == 1 && mov[0] == 1;
+  try
+  {
+    v.at(0);
+    return false;
+  }
+  catch (std::out_of_range &)
+  {
+    return res;
+  }
+  catch (...)
+  {
+    return false;
+  }
 }
 
 int main()
@@ -161,8 +244,12 @@ int main()
     { "Pop back", testPopBack },
     { "Copy empty vector", testCopyConstructorForEmpty },
     { "Copy non-empty vector", testCopyConstructorForNonEmpty },
-    { "Copy vector with operator", testCopyOperator },
-    { "Move vector", testMoveOperator }
+    { "Copy empty vector with operator ", testCopyOperatorForEmpty },
+    { "Copy non-empty vector with operator", testCopyOperatorForNonEmpty },
+    { "Move empty vector ", testMoveConstructorForEmpty },
+    { "Move non-empty vector", testMoveConstructorForNonEmpty},
+    { "Move empty vector with operator ", testMoveOperatorForEmpty },
+    { "Move non-empty vector with operator", testMoveOperatorForNonEmpty }
   };
 
   const size_t count = sizeof(tests) / sizeof(test_t);
