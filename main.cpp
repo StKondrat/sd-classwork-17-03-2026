@@ -3,6 +3,7 @@
 
 bool testEmptyVector()
 {
+  // std::cout << __func__ << "\n";
   topit::Vector< int > v;
   return v.isEmpty();
 }
@@ -66,4 +67,6 @@ int main()
   }
 
   std::cout << "RESULT: " << pass << "\n";
+  // Подсчет пройденных/непройденных
+  // Выводить только непройденные
 }
