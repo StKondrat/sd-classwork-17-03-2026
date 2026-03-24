@@ -8,6 +8,39 @@ bool testEmptyVector()
   return v.isEmpty();
 }
 
+bool testElementInboundAccess()
+{
+  topit::Vector< int > v;
+  v.pushBack(1);
+  try
+  {
+  int & val = v.at(0);
+  return val == 1;
+  }
+  catch(...)
+  {
+    return false;
+  }
+}
+
+bool testElementOutOfBoundAccess()
+{
+  topit::Vector< int > v;
+  try
+  {
+    v.at(0);
+    return false;
+  }
+  catch(const std::out_of_range &)
+  {
+    return true;
+  }
+  catch(...)
+  {
+    return false;
+  }
+}
+
 bool testGetSize()
 {
   topit::Vector< int > v;
@@ -49,6 +82,8 @@ int main()
   test_t tests[] = 
   {
     { "Empty vector", testEmptyVector },
+    { "Inbound access", testElementInboundAccess },
+    { "Out of bound access", testElementOutOfBoundAccess},
     { "Get size", testGetSize },
     { "Get capacity", testGetCapacity },
     { "Push back", testPushBack },
