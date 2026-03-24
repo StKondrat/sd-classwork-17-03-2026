@@ -92,6 +92,60 @@ void topit::Vector< T >::pushBack(const T & v)
 }
 
 template< class T >
+void topit::Vector< T >::insert(size_t i, const T & v)
+{
+  if (i > size_)
+  {
+    throw std::out_of_range("bad id");
+  }
+
+  const size_t newCapacity = (size_ < capacity_) ? capacity_ : (capacity_ + 1);
+  T * newData = nullptr;
+  try
+  {
+    newData = new T[newCapacity];
+    for (size_t j = 0; j < i; ++j)
+    {
+      newData[j] = data_[j];
+    }
+    newData[i] = v;
+    for (size_t j = i; j < size_; ++j)
+    {
+      newData[j + 1] = data_[j];
+    }
+  }
+  catch(...)
+  {
+    delete[] newData;
+    throw;
+  }
+
+  delete[] data_;
+  data_ = newData;
+  capacity_ = newCapacity;
+  ++size_;
+}
+
+template< class T >
+void topit::Vector< T >::insert(size_t i, const Vector< T > & rhs, size_t start, size_t end)
+{
+  if (i > size_ || start > end || end > rhs.getSize())
+  {
+    throw std::out_of_range("bad id");
+  }
+
+  topit::Vector< T > temp = *this;
+  size_t pos = i;
+
+  for (size_t j = start; j < end; ++j)
+  {
+    temp.insert(pos++, rhs[j]);
+  }
+
+  *this = temp;
+}
+
+template< class T >
 void topit::Vector< T >::swap(Vector< T > & rhs) noexcept
 {
   std::swap(data_, rhs.data_);

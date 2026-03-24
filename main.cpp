@@ -228,6 +228,60 @@ bool testMoveOperatorForNonEmpty()
   }
 }
 
+bool testInsertWithPositionEmpty()
+{
+  topit::Vector< int > v;
+  v.insert(0, 1);
+  return v.getSize() && v[0] == 1;
+}
+
+bool testInsertWithPositionNonEmpty()
+{
+  topit::Vector< int > v;
+  v.pushBack(0);
+  v.pushBack(1);
+  v.pushBack(2);
+  v.pushBack(3);
+  v.pushBack(4);
+
+  v.insert(2, 5);
+  v.popBack();
+  v.insert(5, 10);
+  return v.getSize() == 6 && v[2] == 5 && v[3] == 2 && v[5] == 10;
+}
+
+bool testInsertPartOfVectorEmpty()
+{
+  topit::Vector< int > v;
+  topit::Vector< int > v2;
+  v2.pushBack(0);
+  v2.pushBack(1);
+  v2.pushBack(2);
+  v2.pushBack(3);
+  v2.pushBack(4);
+
+  v.insert(0, v2, 1, 3);
+  return v.getSize() == 2 && v[0] == 1 && v[1] == 2;
+}
+
+bool testInsertPartOfVectorNonEmpty()
+{
+  topit::Vector< int > v;
+  v.pushBack(0);
+  v.pushBack(1);
+  v.pushBack(2);
+
+  topit::Vector< int > v2;
+  v2.pushBack(3);
+  v2.pushBack(4);
+  v2.pushBack(5);
+  v2.pushBack(6);
+  v2.pushBack(7);
+
+  v.insert(1, v2, 1, 4);
+  return v.getSize() == 6 && v[1] == 4 && v[4] == 1;
+}
+
 int main()
 {
   using test_t = std::pair< const char *, bool(*)() >;
@@ -244,12 +298,16 @@ int main()
     { "Pop back", testPopBack },
     { "Copy empty vector", testCopyConstructorForEmpty },
     { "Copy non-empty vector", testCopyConstructorForNonEmpty },
-    { "Copy empty vector with operator ", testCopyOperatorForEmpty },
+    { "Copy empty vector with operator", testCopyOperatorForEmpty },
     { "Copy non-empty vector with operator", testCopyOperatorForNonEmpty },
-    { "Move empty vector ", testMoveConstructorForEmpty },
+    { "Move empty vector", testMoveConstructorForEmpty },
     { "Move non-empty vector", testMoveConstructorForNonEmpty},
-    { "Move empty vector with operator ", testMoveOperatorForEmpty },
-    { "Move non-empty vector with operator", testMoveOperatorForNonEmpty }
+    { "Move empty vector with operator", testMoveOperatorForEmpty },
+    { "Move non-empty vector with operator", testMoveOperatorForNonEmpty },
+    { "Insert at a position in an empty vector", testInsertWithPositionEmpty },
+    { "Insert at a position in a non-empty vector", testInsertWithPositionNonEmpty },
+    { "Insert part of a vector into an empty vector", testInsertPartOfVectorEmpty },
+    { "Insert part of a vector into a non-empty vector", testInsertPartOfVectorNonEmpty }
   };
 
   const size_t count = sizeof(tests) / sizeof(test_t);
