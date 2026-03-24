@@ -2,6 +2,8 @@
 #define TOP_IT_VECTOR_HPP
 
 #include <cstddef>
+#include <stdexcept>
+#include <utility>
 
 namespace topit
 {
@@ -11,8 +13,8 @@ namespace topit
     Vector();
     ~Vector();
     Vector(const Vector &);
-    Vector(Vector &&);
-    Vector< T >::Vector(size_t size, const T & init);
+    Vector(Vector &&) noexcept;
+    Vector(size_t size, const T & init);
     Vector< T > & operator=(const Vector< T > &);
     Vector< T > & operator=(Vector< T > &&);
 
@@ -119,7 +121,9 @@ topit::Vector< T >::Vector(Vector< T > && rhs) noexcept:
   size_(rhs.size_),
   capacity_(rhs.capacity_)
 {
-  rhs.data_ == nullptr;
+  rhs.data_ = nullptr;
+  rhs.size_ = 0;
+  rhs.capacity_ = 0;
 }
 
 template< class T >
@@ -138,7 +142,7 @@ topit::Vector< T >::Vector(size_t size, const T & init):
 {
   for (size_t i = 0; i < size; ++i)
   {
-    data[i] = init;
+    data_[i] = init;
   }
 }
 

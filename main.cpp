@@ -126,22 +126,43 @@ bool testCopyConstructorForNonEmpty()
   return v == yav;
 }
 
+bool testCopyOperator()
+{
+  topit::Vector< int > v;
+  v.pushBack(1);
+  topit::Vector< int > cv;
+  cv = v;
+  return cv == v;
+}
+
+bool testMoveOperator()
+{
+  topit::Vector< int > v;
+  v.pushBack(1);
+  topit::Vector< int > mvv;
+  mvv = std::move(v);
+  bool res = mvv.getSize() == 1 && mvv[0] == 1;
+  return res;
+}
+
 int main()
 {
   using test_t = std::pair< const char *, bool(*)() >;
-  test_t tests[] = 
+  test_t tests[] =
   {
     { "Empty vector", testEmptyVector },
     { "Inbound access", testElementInboundAccess },
-    { "Out of bound access", testElementOutOfBoundAccess},
-    { "Inbound const access", testElementInboundConstAccess},
-    { "Out of bound const access", testElementOutOfBoundConstAccess},
+    { "Out of bound access", testElementOutOfBoundAccess },
+    { "Inbound const access", testElementInboundConstAccess },
+    { "Out of bound const access", testElementOutOfBoundConstAccess },
     { "Get size", testGetSize },
     { "Get capacity", testGetCapacity },
     { "Push back", testPushBack },
     { "Pop back", testPopBack },
-    { "Copy empty vector", testCopyConstructorForEmpty},
-    { "Copy non-empty vector", testCopyConstructorForNonEmpty}
+    { "Copy empty vector", testCopyConstructorForEmpty },
+    { "Copy non-empty vector", testCopyConstructorForNonEmpty },
+    { "Copy vector with operator", testCopyOperator },
+    { "Move vector", testMoveOperator }
   };
 
   const size_t count = sizeof(tests) / sizeof(test_t);
