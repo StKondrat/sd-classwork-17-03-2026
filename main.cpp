@@ -282,6 +282,30 @@ bool testInsertPartOfVectorNonEmpty()
   return v.getSize() == 6 && v[1] == 4 && v[4] == 1;
 }
 
+bool testEraseIndex()
+{
+  topit::Vector< int > v;
+  v.pushBack(0);
+  v.pushBack(1);
+  v.pushBack(2);
+  v.pushBack(3);
+
+  v.erase(2);
+  return v.getSize() == 3 && v[2] == 3;
+}
+
+bool testEraseStartEnd()
+{
+  topit::Vector< int > v;
+  v.pushBack(0);
+  v.pushBack(1);
+  v.pushBack(2);
+  v.pushBack(3);
+
+  v.erase(1, 3);
+  return v.getSize() == 2 && v[0] == 0 && v[1] == 3;
+}
+
 int main()
 {
   using test_t = std::pair< const char *, bool(*)() >;
@@ -307,7 +331,9 @@ int main()
     { "Insert at a position in an empty vector", testInsertWithPositionEmpty },
     { "Insert at a position in a non-empty vector", testInsertWithPositionNonEmpty },
     { "Insert part of a vector into an empty vector", testInsertPartOfVectorEmpty },
-    { "Insert part of a vector into a non-empty vector", testInsertPartOfVectorNonEmpty }
+    { "Insert part of a vector into a non-empty vector", testInsertPartOfVectorNonEmpty },
+    { "Erase by index in a vector", testEraseIndex },
+    { "Erase from start to end in a vector", testEraseStartEnd }
   };
 
   const size_t count = sizeof(tests) / sizeof(test_t);
