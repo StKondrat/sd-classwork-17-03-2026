@@ -84,8 +84,24 @@ void topit::Vector< T >::pushBack(const T & v)
 }
 
 template< class T >
-topit::Vector< T >::Vector(const Vector< T > & rhs)
-{}
+topit::Vector< T >::Vector(const Vector< T > & rhs):
+  data_(rhs.getSize() ? new T[rhs.getSize()] : nullptr),
+  size_(rhs.getSize()),
+  capacity_(rhs.getSize())
+{
+  for (size_t i = 0; i < rhs.getSize(); ++i)
+  {
+    try
+    {
+      data_[i] = rhs[i];
+    }
+    catch(...)
+    {
+      delete[] data_;
+      throw;
+    }
+  }
+}
 
 template< class T >
 bool topit::operator==(const topit::Vector< T > & lhs, const topit::Vector< T > & rhs)
@@ -112,7 +128,8 @@ template< class T >
 T & topit::Vector< T >::at(size_t id)
 {
   const Vector< T > * cthis = this;
-  return const_cast< T & >(cthis->at(id));
+  const T & ret = cthis->at(id);
+  return const_cast< T & >(ret);
 }
 
 template< class T >
