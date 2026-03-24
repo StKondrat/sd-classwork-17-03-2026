@@ -189,12 +189,15 @@ void topit::Vector< T >::erase(size_t start, size_t end)
     throw std::out_of_range("bad id");
   }
 
+  topit::Vector< T > temp = *this;
+
   for (size_t i = start; i < end; ++i)
   {
-    erase(start);
+    temp.erase(start);
   }
-}
 
+  *this = temp;
+}
 
 template< class T >
 void topit::Vector< T >::swap(Vector< T > & rhs) noexcept
