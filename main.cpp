@@ -122,7 +122,7 @@ bool testCopyConstructorForNonEmpty()
 {
   topit::Vector< int > v;
   v.pushBack(1);
-  topit::Vector< int > yav(v);
+  topit::Vector< int > yav = v;
   return v == yav;
 }
 
