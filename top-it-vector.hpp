@@ -67,27 +67,31 @@ size_t topit::Vector< T >::getCapacity() const noexcept
 template< class T >
 void topit::Vector< T >::pushBack(const T & v)
 {
-  T * newData = nullptr;
-  if (size_ == capacity_)
+  if (size_ < capacity_)
   {
-    try
-    {
-      newData = new T[capacity_ + 1];
-      for (size_t i = 0; i < size_; ++i)
-      {
-        newData[i] = data_[i];
-      }
-    }
-    catch(...)
-    {
-      delete[] newData;
-      throw;
-    }
-    ++capacity_;
-    delete[] data_;
-    data_ = newData;
+    data_[size_] = v;
+    ++size_;
+    return;
   }
-  data_[size_] = v;
+
+  T * newData = nullptr;
+  try
+  {
+    newData = new T[capacity_ + 1];
+    for (size_t i = 0; i < size_; ++i)
+    {
+      newData[i] = data_[i];
+    }
+    newData[size_] = v;
+  }
+  catch(...)
+  {
+    delete[] newData;
+    throw;
+  }
+  delete[] data_;
+  data_ = newData;
+  ++capacity_;
   ++size_;
 }
 
