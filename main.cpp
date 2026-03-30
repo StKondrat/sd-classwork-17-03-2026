@@ -1,6 +1,7 @@
 #include <iostream>
 #include "top-it-vector.hpp"
 
+
 bool testEmptyVector()
 {
   // std::cout << __func__ << "\n";
@@ -306,6 +307,12 @@ bool testEraseStartEnd()
   return v.getSize() == 2 && v[0] == 0 && v[1] == 3;
 }
 
+bool initializerList()
+{
+  topit::Vector< int > v({1, 2, 3});
+  return v.getSize() == 3 && (v[0] == 1) && (v[1] == 2);
+}
+
 int main()
 {
   using test_t = std::pair< const char *, bool(*)() >;
@@ -333,7 +340,8 @@ int main()
     { "Insert part of a vector into an empty vector", testInsertPartOfVectorEmpty },
     { "Insert part of a vector into a non-empty vector", testInsertPartOfVectorNonEmpty },
     { "Erase by index in a vector", testEraseIndex },
-    { "Erase from start to end in a vector", testEraseStartEnd }
+    { "Erase from start to end in a vector", testEraseStartEnd },
+    { "Non-empty vector for non-empty initializer list", initializerList }
   };
 
   const size_t count = sizeof(tests) / sizeof(test_t);

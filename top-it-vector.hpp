@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <stdexcept>
 #include <utility>
+#include <initializer_list>
 
 namespace topit
 {
@@ -15,6 +16,7 @@ namespace topit
     Vector(const Vector &);
     Vector(Vector &&) noexcept;
     Vector(size_t size, const T & init);
+    explicit Vector(std::initializer_list< T > il);
     Vector< T > & operator=(const Vector< T > &);
     Vector< T > & operator=(Vector< T > &&);
 
@@ -22,12 +24,20 @@ namespace topit
     size_t getSize() const noexcept;
     size_t getCapacity() const noexcept;
 
+    // Классная работа
+    void reserve(size_t required);
+    void shrinkToFit();
+
     T & operator[](size_t id) noexcept;
     const T & operator[](size_t id) const noexcept;
     T & at(size_t id);
     const T & at(size_t id) const;
 
     void pushBack(const T & v);
+    template< class IT >
+    void pushBackRange(IT b, size_t c);
+    void pushBackCount(size_t k, const T & val);
+    void unsafePushBack(const T & val);
     void popBack();
     void insert(size_t i, const T & v);
     void insert(size_t i, const Vector< T > & rhs, size_t start, size_t end);
@@ -43,6 +53,17 @@ namespace topit
   };
   template< class T >
   bool operator==(const Vector< T > & lhs, const Vector< T > & rhs);
+}
+
+template< class T >
+topit::Vector< T >::Vector(std::initializer_list< T > il):
+  Vector(il.size())
+{
+  size_t i = 0;
+  for (auto it = il.begin(); it != il.end(); ++it)
+  {
+    data_[i++] = *it;
+  }
 }
 
 template< class T >
@@ -92,6 +113,10 @@ topit::Vector< T >::Vector(size_t size, const T & init):
 template< class T >
 topit::Vector< T > & topit::Vector< T >::operator=(const Vector< T > & rhs)
 {
+  if (this == std::addressof(rhs))
+  {
+    return *this;
+  }
   Vector< T > cpy = rhs;
   swap(cpy);
   return *this;
@@ -100,6 +125,10 @@ topit::Vector< T > & topit::Vector< T >::operator=(const Vector< T > & rhs)
 template< class T >
 topit::Vector< T > & topit::Vector< T >::operator=(Vector< T > && rhs)
 {
+  if (this == std::addressof(rhs))
+  {
+    return *this;
+  }
   Vector< T > cpy(std::move(rhs));
   swap(cpy);
   return *this;
@@ -183,6 +212,20 @@ void topit::Vector< T >::pushBack(const T & v)
   data_ = newData;
   ++capacity_;
   ++size_;
+}
+
+template< class T >
+template< class IT >
+void topit::Vector< T >::pushBackRange(IT b, size_t c)
+{
+  size_t c = 0;
+  for (auto it = b; it != e; ++it, ++c)
+}
+
+template< class T >
+void topit::Vector< T >::pushBackCount(size_t k, const T & val)
+{
+
 }
 
 template< class T >
